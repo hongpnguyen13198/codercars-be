@@ -15,10 +15,18 @@ carController.createCar = async (req, res, next) => {
   };
   try {
     if (!info) {
-      throw new AppError(402, "Bad Request", "Create car Error");
+      throw new AppError(400, "Bad Request", "Create car Error");
     }
     const created = await Foo.create(info);
-    sendResponse(res, 200, true, { data: created }, null, "Create car Success");
+    sendResponse({
+      res,
+      status: 200,
+      success: true,
+      data: { created },
+      error: null,
+      message: "Create car success",
+    });
+    
   } catch (err) {
     next(err);
   }
