@@ -21,6 +21,12 @@ mongoose.connect(process.env.MONGO_URI, () => {
 	console.log('Connected to Database!');
 });
 
+
+// catch 404 and forard to error handler
+app.use((req, res, next) => {
+  const err = new AppError(404,"Not Found","Bad Request");
+  next(err);
+});
 app.use('/', indexRouter);
 
 module.exports = app;
