@@ -10,7 +10,7 @@ router.get("/", async(req,res,next)=>{
         if(test==="error"){
         throw new AppError(401,"Access denied","Authentication Error")
         }else{
-        sendResponse(res,200,true,{data:"template"},null,"template success")
+        sendResponse(res,200,true,{data:"template"},null,"template success");
         }
     }catch(err){
         next(err)
