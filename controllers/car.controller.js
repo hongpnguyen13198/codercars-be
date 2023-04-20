@@ -26,13 +26,14 @@ carController.createCar = async (req, res, next) => {
 };
 
 carController.getCars = async (req, res, next) => {
-  const filter = { isDeleted: { $eq: false } };
+  //const filter = { isDeleted: { $eq: false } };
   let { page } = req.query;
   page = parseInt(page) || 1;
   const limit = 10;
   let offset = limit * (page - 1);
   try {
-    const listOfCar = await Car.find(filter).sort({ createdAt: -1 });
+    const listOfCar = await Car.find();
+    console.log(listOfCar)
     const result = listOfCar.slice(offset, offset + limit);
     const total = listOfCar.length;
     res.status(200).send({

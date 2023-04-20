@@ -36,10 +36,11 @@ const carSchema = new mongoose.Schema(
 	},
 	{
 		timestamps: true,
+		collection: "cars"
 	}
 );
 
-carSchema.pre(/^find/, function (next) {
+/*carSchema.pre(/^find/, function (next) {
 	if (!('_conditions' in this)) return next();
 	if (!('isDeleted' in carSchema.paths)) {
 		delete this['_conditions']['all'];
@@ -52,8 +53,8 @@ carSchema.pre(/^find/, function (next) {
 		delete this['_conditions']['all'];
 	}
 	next();
-});
+}); */
 
-const Car = mongoose.model('Car', carSchema);
+const Car = mongoose.model('cars', carSchema);
 
 module.exports = Car;
