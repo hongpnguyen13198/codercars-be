@@ -17,15 +17,8 @@ carController.createCar = async (req, res, next) => {
     if (!info) {
       throw new AppError(400, "Bad Request", "Create car Error");
     }
-    const created = await Foo.create(info);
-    sendResponse({
-      res,
-      status: 200,
-      success: true,
-      data: { created },
-      error: null,
-      message: "Create car success",
-    });
+    const created = await Car.create(info);
+    res.status(200).send({ message: "Create Car Successfully!", car: created })
     
   } catch (err) {
     next(err);
@@ -78,26 +71,24 @@ carController.editCar = async (req, res, next) => {
   }
 };
 
+
 carController.deleteCar = async (req, res, next) => {
-  const { id } = req.params;
-  const targetId = id;
-  const options = { new: true };
-  try {
-    const deletedCar = await Car.findByIdAndUpdate(
-      targetId,
-      {
-        isDeleted: true,
-      },
-      options
-    );
-    if (!deletedCar) {
-      throw new Error("Car does not exist");
+    try {
+        const { id } = req.params;
+        if (!mongoose.isValidObjectId(id)) {
+      return next(new Error('Invalid ID'));
     }
-    deletedCar = await deletedCar.save();
-    res.status(200).send({ cars: deletedCar, message: "Delete car successfully" });
-  } catch (err) {
-    next(err);
-  }
+        const car = await Car.findByIdAndUpdate(id, 
+      { isDeleted: true }, //we want to return the updated document. 
+      { new: true, runValidators: true });// validating the updated document against the schema
+        if (!car) {
+      return next(new Error('Car not found!'));
+    }
+        return res.status(200).send({ message: 'Delete Car Successfully!'});
+    } catch (err) {
+      res.status(500).send({ message: err.message });
+    }
 };
+
 
 module.exports = carController;
